@@ -23,15 +23,17 @@
 
 #include <util/cublas_helpers.h>
 #include <util/cuda_helpers.h>
+#include <source_location>
 #include <cublas_v2.h>
 
 namespace gemm {
 
+// cuBLAS gemm wrapper
+//
 // check the table in https://docs.nvidia.com/cuda/cublas/#cublasgemmex
 // and consider https://docs.nvidia.com/cuda/cublas/#tensor-core-usage
 template <typename TA, typename TB, typename TC, typename Alpha, typename Beta>
 inline cublasStatus_t
-// float *, float *, const int, float *, const int, float *, float *, const int
 cublas_gemm(cublasHandle_t handle, cublasOperation_t a_op, cublasOperation_t b_op,
      int m, int n, int k,
      const Alpha* alpha,
@@ -39,8 +41,7 @@ cublas_gemm(cublasHandle_t handle, cublasOperation_t a_op, cublasOperation_t b_o
      const TB* B, int ldB,
      const Beta* beta,
      TC* C, int ldC,
-     cublasComputeType_t computeType)
-{
+     cublasComputeType_t computeType) {
     return cublasGemmEx(handle, a_op, b_op,
                         m, n, k,
                         &alpha, A, getCudaDataType<TA>(), ldA, B, getCudaDataType<TB>(), ldB,
@@ -49,4 +50,25 @@ cublas_gemm(cublasHandle_t handle, cublasOperation_t a_op, cublasOperation_t b_o
                         CUBLAS_GEMM_DEFAULT);
 }
 
+// Helper lambda (e.g. for benchmark)
+template <typename TA, typename TB, typename TC, typename Alpha, typename Beta>
+auto
+cublas_func(cublasHandle_t handle, cublasOperation_t a_op, cublasOperation_t b_op,
+     int m, int n, int k,
+     const Alpha* alpha,
+     const TA* A, int ldA,
+     const TB* B, int ldB,
+     const Beta* beta,
+     TC* C, int ldC,
+     cublasComputeType_t computeType,
+     const std::source_location& loc = std::source_location::current()
+     ) {
+    return [=]() -> void {
+        cublas_check(
+                cublas_gemm(handle, a_op, b_op, m, n, k,
+                            alpha, A, ldA, B, ldB, beta, C, ldC, computeType),
+                loc,               // pass through caller's source location
+                "gemm error{}");
+    };
+}
 } // namespace gemm
