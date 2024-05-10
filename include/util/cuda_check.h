@@ -35,21 +35,33 @@
 
 namespace gemm {
 
-// Check if a CUDA status is error and print line of the caller
+// Check CUDA error and print it with source line of the caller.
 // It takes either a string or a format string and its arguments.
 template <typename... Args>
 struct cuda_check {
-    cuda_check(cudaError_t error, const std::string_view& fmt, Args&&... args, const std::source_location& loc = std::source_location::current()) {
+    // Called with a forwarded source location
+    cuda_check(cudaError_t error, const std::source_location& loc,
+            const std::string_view& fmt, Args&&... args) {
         if (error != cudaSuccess) {
             std::string msg_u;
             if constexpr (sizeof...(args) == 0) {
-                msg_u = fmt;
+                msg_u = fmt;                         // plain string
             } else {
                 msg_u = std::vformat(fmt, std::make_format_args(std::forward<Args>(args)...));
             }
             std::cerr << std::format("[CUDA ERROR]: {} at {}:{}\n    {}\n",
                    cudaGetErrorName(error), loc.file_name(), loc.line(), msg_u);
         }
+    }
+    // Called with format string; picks caller's location
+    cuda_check(cudaError_t error, const std::string_view& fmt, Args&&... args,
+            const std::source_location& loc = std::source_location::current()) {
+        cuda_check(error, loc, fmt, args...);
+    }
+    // Called with no string; picks caller's location
+    cuda_check(cudaError_t error,
+            const std::source_location& loc = std::source_location::current()) {
+        cuda_check(error, loc, "");
     }
 };
 
