@@ -21,6 +21,7 @@
 
 // cuBLAS convenience type conversion helpers for API
 
+#include <string>
 #include <cublas_v2.h>
 
 namespace gemm {
@@ -48,4 +49,26 @@ constexpr cublasComputeType_t cublasDefaultComputeType<__half>() {
 }
 #endif
 
+//
+// cublasComputeType_t string
+//
+constexpr std::string cublasComputeTypeStr(cublasComputeType_t computeType) {
+    switch (computeType) {
+        case CUBLAS_COMPUTE_64F:
+            return "f64-f64";
+        case CUBLAS_COMPUTE_32F:
+            return "f32-f32";
+        case CUBLAS_COMPUTE_32F_FAST_TF32:
+            return "f32-tf32";
+        case CUBLAS_COMPUTE_32F_FAST_16BF:
+            return "f32-bf16";
+        case CUBLAS_COMPUTE_32F_FAST_16F:
+            return "f32-f16";
+        case CUBLAS_COMPUTE_16F:
+            return "f16-f16";
+        default:
+            return "other";
+    }
 }
+
+} // namespace gemm
