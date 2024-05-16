@@ -19,7 +19,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-// wrappers for cuBLAS GEMM API
+// wrappers for cuBLAS
 
 #include <util/cublas_helpers.h>
 #include <util/cuda_helpers.h>
@@ -29,7 +29,7 @@
 #include <cublas_v2.h>
 #include <cublas_api.h>
 
-namespace gemm {
+namespace util {
 
 // cuBLAS gemm wrapper
 //
@@ -182,4 +182,5 @@ LtMatmul(cublasLtHandle_t ltHandle, int m, int n, int k,
     if (Adesc) cublas_check(cublasLtMatrixLayoutDestroy(Adesc));
     if (operationDesc) cublas_check(cublasLtMatmulDescDestroy(operationDesc));
 }
-} // namespace gemm
+
+} // namespace util

@@ -33,7 +33,7 @@
 #include <source_location>
 #include <string_view>
 
-namespace gemm {
+namespace util {
 
 // Check CUDA error and print it with source line of the caller.
 // It takes either a string or a format string and its arguments.
@@ -69,4 +69,4 @@ struct cuda_check {
 template <typename... Args>
 cuda_check(cudaError_t, const std::string_view&, Args&&...) -> cuda_check<Args...>;
 
-}  // namespace gemm
+}  // namespace util

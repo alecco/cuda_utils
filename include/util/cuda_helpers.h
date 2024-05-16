@@ -26,7 +26,7 @@
 #include <cuda_bf16.h>
 #include <cuda_fp8.h>
 
-namespace gemm {
+namespace util {
 
 //
 // cudaDataType helpers
@@ -71,4 +71,4 @@ constexpr cudaDataType_t getCudaDataType<int8_t>() {
 }
 #endif
 
-}
+} // namespace util

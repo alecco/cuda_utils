@@ -34,7 +34,7 @@
 #include <source_location>
 #include <string_view>
 
-namespace gemm {
+namespace util {
 
 // Check if a cuBLAS status is error and print it with line of the caller.
 // It takes either a string or a format string and its arguments.
@@ -68,4 +68,4 @@ struct cublas_check {
 template <typename... Args>
 cublas_check(cublasStatus_t, const std::string_view&, Args&&...) -> cublas_check<Args...>;
 
-}  // namespace gemm
+}  // namespace util

@@ -24,7 +24,7 @@
 #include <string>
 #include <cublas_v2.h>
 
-namespace gemm {
+namespace util {
 
 //
 // cublasComputeType_t defaults for a given data type (i.e. same size)
@@ -71,4 +71,4 @@ constexpr std::string cublasComputeTypeStr(cublasComputeType_t computeType) {
     }
 }
 
-} // namespace gemm
+} // namespace util

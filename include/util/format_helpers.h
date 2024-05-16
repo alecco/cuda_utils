@@ -29,7 +29,8 @@
 // NOTE: using std::string because std::make_format_args() does not like std::string_view atm
 #include <string>
 
-namespace gemm {
+namespace util {
+
 template <typename T>
 constexpr const std::string type_name();
 
@@ -78,4 +79,4 @@ constexpr const std::string type_name<int8_t>() {
 }
 #endif
 
-} // namespace gemm
+} // namespace util
