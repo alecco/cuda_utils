@@ -23,7 +23,7 @@
 
 #include <library_types.h>
 
-namespace gemm {
+namespace util {
 
 //
 // cudaDataType helpers
@@ -76,4 +76,4 @@ constexpr cudaDataType_t getCudaDataType<int8_t>() {
 }
 #endif
 
-}
+} // namespace util

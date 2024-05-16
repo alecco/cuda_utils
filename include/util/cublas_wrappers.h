@@ -19,14 +19,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-// wrappers for cuBLAS GEMM API
+// wrappers for cuBLAS
 
 #include <util/cublas_helpers.h>
 #include <util/cuda_helpers.h>
 #include <source_location>
 #include <cublas_v2.h>
 
-namespace gemm {
+namespace util {
 
 // cuBLAS gemm wrapper
 //
@@ -71,4 +71,4 @@ cublas_func(cublasHandle_t handle, cublasOperation_t a_op, cublasOperation_t b_o
                 "gemm error{}");
     };
 }
-} // namespace gemm
+} // namespace util
